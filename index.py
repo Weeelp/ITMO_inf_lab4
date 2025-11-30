@@ -28,16 +28,23 @@ except Exception as e:
 # С БИБЛИОТЕКАМИ
 #-------------------------------------------
 
-import toml
 import json
+import time
+import toml
+import msgpack
+
 start = time.time()
 
 try:    
     with open('data/timetable.toml', 'r', encoding='utf-8') as inputf:
         data = toml.load(inputf)
+
+    binary_data = msgpack.packb(data, use_bin_type=True)
+    deserialized_data = msgpack.unpackb(binary_data, raw=False)
     
     with open('data/TIMETABLE.json', 'w', encoding='utf-8') as outputf:
-        json.dump(data, outputf, ensure_ascii=False, indent=2)
+        json.dump(deserialized_data, outputf, ensure_ascii=False, indent=2)
+
 except Exception as e:
         print(f"Ошибка из index.py: {e}")    
 finally:
